@@ -19,6 +19,8 @@ description: Check if this working copy is behind the remote repo, show what cha
    - 로컬 커밋(pending 제안 등)이 있으면 **먼저 push**한다.
    - `git pull --ff-only` 실행. 실패(로컬 변경 충돌)하면 충돌 내용을 보여주고
      사용자 결정을 기다린다. 강제 리셋은 절대 하지 않는다.
+   - 새 스킬 폴더가 들어왔으면(신규 패턴 승인 등) `node scripts/install.mjs`를
+     다시 실행해 심링크를 갱신한다. 기존 스킬 수정은 재설치 불필요.
 6. `UPDATE-NOTICE.md`를 삭제하고, 새 버전 번호를 보고한다.
 
 ## 참고
