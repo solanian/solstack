@@ -2,6 +2,16 @@
 
 ## 0.1.2 - 2026-11-13
 
+### pending 리뷰 기록 (버전 무변경, 2026-11-13)
+
+- **반려** `repo-destination-confirm` — (사용자 판정, 이유 미기재)
+- **반려** `e2e-before-done` — (사용자 판정, 이유 미기재)
+- **흡수** `korean-docs-english-frontmatter` — 신규 스킬 불필요.
+  AGENTS.md 언어 정책이 제안 내용과 동일한 내용을 이미 포함함.
+  학습: 유형 preference 중 "상시 적용"은 스킬보다 헌법이 자연스러움.
+
+### 본 기록 (이전)
+
 - 원칙 2개 추가: **프로젝트는 기본 git repo** (git init + 초기 커밋이 기본 동작),
   **세션 = working history** (git log가 히스토리이자 롤백 지점).
 - 신규 스킬 `session-commit`: 세션 단위 커밋 절차, revert 기반 롤백 원칙
