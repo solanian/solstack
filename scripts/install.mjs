@@ -4,7 +4,7 @@
  *
  * Usage:
  *   node scripts/install.mjs --host auto          # install into every detected harness (default)
- *   node scripts/install.mjs --host claude        # one harness only: claude|codex|antigravity
+ *   node scripts/install.mjs --host claude        # one harness only: claude|codex|opencode|antigravity
  *   node scripts/install.mjs --dest /some/dir     # custom global skills dir (e.g. Antigravity)
  *   node scripts/install.mjs --link copy          # 'symlink' (default) or 'copy'
  *   node scripts/install.mjs --with-hooks         # register Claude Code SessionStart/End hooks
@@ -55,6 +55,9 @@ function collectSkills() {
 const HARNESS_DIRS = {
   claude: () => join(homedir(), ".claude", "skills"),
   codex: () => join(homedir(), ".codex", "skills"),
+  // OpenCode also reads ~/.claude/skills as a compatibility source, so an
+  // install for claude already shows up in OpenCode; this is the native path.
+  opencode: () => join(homedir(), ".config", "opencode", "skills"),
   // Antigravity global skills path varies by version; override with --dest when needed.
   antigravity: () => join(homedir(), ".gemini", "skills"),
 };
@@ -65,6 +68,7 @@ function detectAvailable(host) {
   if (host === "auto") {
     if (existsSync(join(home, ".claude"))) found.push("claude");
     if (existsSync(join(home, ".codex"))) found.push("codex");
+    if (existsSync(join(home, ".config", "opencode"))) found.push("opencode");
     if (existsSync(join(home, ".gemini")) || process.env.ANTIGRAVITY_SKILLS_DIR) found.push("antigravity");
   } else {
     found.push(host);

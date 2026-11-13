@@ -83,7 +83,18 @@ node scripts/update-check.mjs --force
 | 하네스 | 스킬 경로 |
 |---|---|
 | Claude Code | `~/.claude/skills/<skill-name>` |
+| OpenCode | `~/.config/opencode/skills/<skill-name>` — 단, `~/.claude/skills`를 호환 소스로 자동 스캔하므로 claude 설치만으로도 동작 |
 | Codex | `~/.codex/skills/<skill-name>` |
 | Antigravity | IDE 설정의 Global skills 디렉터리 (docs: https://antigravity.google/docs/skills/) |
+
+**OpenCode 전용 꿀팁** — 심링크 없이 원본 디렉터리를 직접 소스로 등록할 수 있다.
+`~/.config/opencode/opencode.json`에:
+
+```jsonc
+{ "$schema": "https://opencode.ai/config.json", "skills": ["~/solstack/skills"] }
+```
+
+이렇게 하면 repo에 스킬 폴더가 새로 생겨도 재설치 없이 자동 발견된다.
+(OpenCode는 폴더 경로가 곧 스킬 ID다. `meta/harvest` → ID `harvest`)
 
 Antigravity의 전역 스킬 경로는 환경에 따라 다르므로 `--dest`로 직접 지정할 수 있다.

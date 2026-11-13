@@ -17,14 +17,17 @@
 1. **skills/ 직접 수정 금지** — 어떤 파일도 승인 절차 없이 수정·삭제·추가하지 않는다.
    개선 아이디어, 반복 패턴, 암묵지 발견 → `ledger/pending/`에 후보 제안으로만 적재
    (파일명 `YYYY-MM-DD-<짧은-이름>.md`, 형식은 `TEMPLATE.md` 따름).
-2. **컨펌 없는 반영 금지** — 반영 시 `skills/meta/review-pending/SKILL.md` 절차를 따른다.
-   반영마다 `ledger/VERSION` bump + `ledger/CHANGELOG.md` 기록 + 커밋.
+2. **쓰기 전 보여주기 (show-before-write)** — `skills/`와 AGENTS.md에 어떤 쓰기든,
+   **최종 내용 전체를 먼저 보여주고 승인받은 뒤에 기록한다.**
+   "만들어줘 / 강화해줘" 같은 지시는 초안 작성 지시일 뿐, **기록 승인이 아니다.**
+   승인받으면 즉시: VERSION bump + CHANGELOG 기록 + 커밋.
    반려 이유도 CHANGELOG에 한 줄 남긴다(학습 데이터).
 3. **동기화는 잃지 않는 방향으로만** — 세션 시작 시 `UPDATE-NOTICE.md`를 먼저 확인하고
    사용자에게 알린다. 사용자가 확인하기 전까지 pull하지 않는다.
    pull은 `git pull --ff-only`만. 로컬 커밋(pending 포함)은 먼저 push한다.
-4. **이 파일도 게이트로만 개정** — AGENTS.md 자체의 수정은 사용자의 명시적 지시 또는
-   pending 제안(반영 대상: AGENTS.md)의 컨펌을 통해서만. 자의적 개정 금지.
+4. **이 파일도 게이트로만 개정** — AGENTS.md 자체의 수정은 pending 제안(반영 대상:
+   AGENTS.md)의 컨펌 또는 show-before-write 승인을 통해서만.
+   요약·설명 제시는 개정 승인으로 불충분하다.
 
 ## 원칙 (한 줄, 절차 상세는 스킬)
 
