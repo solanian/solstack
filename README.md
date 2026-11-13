@@ -1,4 +1,4 @@
-# mystack
+# solstack
 
 개인용 에이전트 스킬북. Claude Code / Codex / Antigravity 어디서든 같은 스킬을 쓰고,
 작업하면서 발견한 암묵지와 반복 패턴을 **직접 컨펌받아** 스킬로 축적한다.
@@ -9,7 +9,7 @@ paperthin(범용 설치 레이어) + gstack(업데이트 채널/게이트) + pst
 ## 구조
 
 ```
-mystack/
+solstack/
 ├── AGENTS.md              # 에이전트가 반드시 지켜야 할 운영 규칙 (게이트 포함)
 ├── skills/
 │   ├── meta/              # 자기 관리 스킬: harvest / review-pending / upgrade

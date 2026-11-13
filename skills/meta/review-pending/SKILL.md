@@ -6,7 +6,7 @@ description: Present pending skill proposals from ledger/pending one by one, get
 # Review Pending — 후보 컨펌 및 반영
 
 목적: `ledger/pending/`의 제안을 사용자에게 보여주고, 승인분만 `skills/`에 반영한다.
-이 스킬이 mystack의 유일한 쓰기 게이트다.
+이 스킬이 solstack의 유일한 쓰기 게이트다.
 
 ## 절차
 

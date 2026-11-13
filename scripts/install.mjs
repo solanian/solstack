@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * mystack installer — installs skills into each detected agent harness.
+ * solstack installer — installs skills into each detected agent harness.
  *
  * Usage:
  *   node scripts/install.mjs --host auto          # install into every detected harness (default)

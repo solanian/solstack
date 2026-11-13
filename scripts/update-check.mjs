@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * mystack update-check — compares this working copy against the remote and
+ * solstack update-check — compares this working copy against the remote and
  * writes UPDATE-NOTICE.md when behind. Throttled to once per hour unless --force.
  *
  * Usage:
@@ -71,7 +71,7 @@ const commits = log ? log.split("\n") : [];
 const localCommits = git("log", "--oneline", `${remoteHead}..${localHead}`) ?? "";
 
 const lines = [
-  "# ⬆ mystack 업데이트 알림",
+  "# ⬆ solstack 업데이트 알림",
   "",
   `이 작업지는 원격보다 **${commits.length}개 커밋** 뒤처져 있습니다.`,
   `- 로컬 버전: ${localVersion}`,
@@ -83,7 +83,7 @@ const lines = [
   localCommits
     ? `> ⚠ 로컬 전용 커밋이 있습니다. \`upgrade\` 스킬은 먼저 push 후 pull합니다.\n>\n> ${localCommits.split("\n").join("\n> ")}\n`
     : "",
-  "반영하려면 에이전트에게: \"mystack 업그레이드 해줘\" (upgrade 스킬이 확인 후 pull합니다)",
+  "반영하려면 에이전트에게: \"solstack 업그레이드 해줘\" (upgrade 스킬이 확인 후 pull합니다)",
 ];
 
 writeFileSync(NOTICE, lines.filter((l) => l !== "").join("\n") + "\n");

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** mystack session-end hook — runs a throttled update check so the next
+/** solstack session-end hook — runs a throttled update check so the next
  *  session starts with a fresh notice. Silent by design; never throws. */
 import { spawn } from "node:child_process";
 import { dirname, join, resolve } from "node:path";

@@ -5,7 +5,7 @@ description: Check if this working copy is behind the remote repo, show what cha
 
 # Upgrade — 원격 변경 확인 및 반영
 
-목적: 여러 작업지에서 쓰는 mystack을 최신으로 맞춘다. 항상 사용자 확인 후 pull.
+목적: 여러 작업지에서 쓰는 solstack을 최신으로 맞춘다. 항상 사용자 확인 후 pull.
 
 ## 절차
 
