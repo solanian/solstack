@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2 - 2026-11-13
+
+- 원칙 2개 추가: **프로젝트는 기본 git repo** (git init + 초기 커밋이 기본 동작),
+  **세션 = working history** (git log가 히스토리이자 롤백 지점).
+- 신규 스킬 `session-commit`: 세션 단위 커밋 절차, revert 기반 롤백 원칙
+  (reset --hard 금지, 롤백 전 사용자 컨펌), 커밋 분할 기준("혼자 revert 가능한가").
+- (사용자 지시 + show-before-write 승인 2026-11-13)
+
 ## 0.1.1 - 2026-11-13
 
 - 게이트 2 → **show-before-write**로 교체: skills/와 AGENTS.md의 모든 쓰기는
