@@ -1,0 +1,11 @@
+{
+  "name": "mystack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal cross-harness agent skillbook with a confirm-gated self-update loop",
+  "type": "module",
+  "scripts": {
+    "install:skills": "node scripts/install.mjs --host auto",
+    "update-check": "node scripts/update-check.mjs --force"
+  }
+}
