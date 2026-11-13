@@ -15,8 +15,11 @@ description: Present pending skill proposals from ledger/pending one by one, get
 3. 판정을 묻는다: `승인 / 반려 / 수정 후 승인 / 보류`.
    - 수정 후 승인이면 사용자 지시대로 제안을 고친 뒤 다시 보여준다.
 4. **승인 처리** (판정별로 즉시 수행):
-   - 승인: 제안의 반영 대상에 따라 `skills/patterns/<이름>/SKILL.md`를 만들거나
-     기존 스킬을 편집한다. 스킬 작성 규칙(AGENTS.md) 준수.
+   - 승인: **반영 대상을 판정**한다.
+     - 특정 상황에서 발동되는 절차·패턴 → `skills/patterns/<이름>/SKILL.md`를 만들거나
+       기존 스킬을 편집한다. 스킬 작성 규칙(AGENTS.md) 준수.
+     - 모든 작업에 항상 적용되는 짧은 규칙(예: 커밋 메시지 언어) → 스킬이 아니라
+       AGENTS.md(또는 전역 rules 포인터)에 반영하고 사용자에게 그렇게 말한다.
    - 반려: pending 파일 삭제, 반려 이유 한 줄을 CHANGELOG에 기록.
    - 보류: 파일을 그대로 둔다.
 5. 승인분이 하나라도 있으면:
