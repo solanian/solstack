@@ -20,16 +20,22 @@ solstack/
 │   └── VERSION
 ├── scripts/
 │   ├── install.mjs        # 하네스별 설치 (claude/codex/antigravity/auto)
-│   └── update-check.mjs   # 원격 대비 뒤처짐 확인 → UPDATE-NOTICE.md 생성
+│   ├── update-check.mjs   # 원격 대비 뒤처짐 확인 → UPDATE-NOTICE.md 생성
+│   └── validate-skills.mjs # SKILL.md frontmatter 검증 (CI에서도 실행)
 └── hooks/
-    └── session-end.mjs    # 세션 종료 시 update-check 실행 (throttle 내장)
+    ├── session-start.mjs  # 세션 시작: throttle 체크 + notice를 컨텍스트로 주입
+    └── session-end.mjs    # 세션 종료: throttle 체크 (다음 세션용)
 ```
 
 ## 빠른 시작
 
+머신당 한 번만 클론하고 설치한다. **프로젝트 repo에 넣지 않는다.**
+
 ```bash
-# 설치 (감지되는 모든 하네스에)
-node scripts/install.mjs --host auto
+git clone https://github.com/solanian/solstack.git ~/solstack && cd ~/solstack
+
+# 스킬 설치 + Claude 훅 + 전역 규칙 포인터
+node scripts/install.mjs --host auto --with-hooks --with-rules
 
 # 업데이트 뒤처짐 확인 (원할 때)
 node scripts/update-check.mjs --force
@@ -62,9 +68,14 @@ node scripts/update-check.mjs --force
 
 ## 여러 작업지에서 쓰기
 
-1. 각 작업 환경에서 이 repo를 클론하고 `node scripts/install.mjs --host auto`
-2. 세션 시작/종료 훅이 `update-check.mjs`를 실행 (시간당 1회 throttle)
-3. 뒤처져 있으면 `UPDATE-NOTICE.md`가 생기고, 에이전트가 세션 시작 알림을 띄움
+1. **머신당 클론 1개**: 각 머신에서 이 repo를 클론(예: `~/solstack`)하고 `node scripts/install.mjs --host auto --with-hooks --with-rules`
+   - 프로젝트 repo에는 아무것도 넣지 않는다. 스킬은 하네스 전역 디렉터리에 심링크되므로
+     어떤 프로젝트의 세션에서도 쓸 수 있다.
+2. Claude Code 훅이 알아서 돌려준다:
+   - **SessionStart**: throttle된 update-check 실행 → 뒤처져 있으면 notice가 세션 컨텍스트로 주입됨
+   - **SessionEnd**: 동일한 throttle된 체크 (다음 세션을 위해)
+3. `--with-rules`가 `~/.claude/CLAUDE.md`(와 `~/.codex/AGENTS.md`)에 게이트 규칙 포인터를
+   붙여넣으므로, solstack 폴더 밖에서 작업해도 게이트가 보인다.
 4. 확인 후 `/upgrade`로 pull (로컬 변경 보호를 위해 `--ff-only`만 허용)
 
 ## 하네스별 설치 위치

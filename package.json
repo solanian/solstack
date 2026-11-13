@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "install:skills": "node scripts/install.mjs --host auto",
-    "update-check": "node scripts/update-check.mjs --force"
+    "update-check": "node scripts/update-check.mjs --force",
+    "validate": "node scripts/validate-skills.mjs"
   }
 }

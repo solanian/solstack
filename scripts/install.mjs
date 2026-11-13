@@ -7,7 +7,8 @@
  *   node scripts/install.mjs --host claude        # one harness only: claude|codex|antigravity
  *   node scripts/install.mjs --dest /some/dir     # custom global skills dir (e.g. Antigravity)
  *   node scripts/install.mjs --link copy          # 'symlink' (default) or 'copy'
- *   node scripts/install.mjs --with-hooks         # also register a Claude Code SessionEnd hook
+ *   node scripts/install.mjs --with-hooks         # register Claude Code SessionStart/End hooks
+ *   node scripts/install.mjs --with-rules         # append gate rules pointer to global memory files
  */
 
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
@@ -25,6 +26,7 @@ function parseArgs(argv) {
     else if (a === "--dest") args.dest = argv[++i];
     else if (a === "--link") args.link = argv[++i];
     else if (a === "--with-hooks") args.withHooks = true;
+    else if (a === "--with-rules") args.withRules = true;
     else if (a === "--help") { usage(); process.exit(0); }
   }
   return args;
@@ -89,21 +91,52 @@ function installInto(name, destDir, mode) {
   return results;
 }
 
-function registerClaudeHook() {
-  // Register a SessionEnd hook that runs update-check.mjs (opt-in, idempotent).
+function registerClaudeHooks() {
+  // Register SessionStart + SessionEnd hooks (opt-in, idempotent).
   const settingsPath = join(homedir(), ".claude", "settings.json");
-  if (!existsSync(settingsPath)) { console.log("no ~/.claude/settings.json — hook not registered"); return; }
+  if (!existsSync(settingsPath)) { console.log("no ~/.claude/settings.json — hooks not registered"); return; }
   const settings = JSON.parse(readFileSync(settingsPath, "utf8"));
   settings.hooks ??= {};
-  settings.hooks.SessionEnd ??= [];
-  const cmd = `node ${join(ROOT, "hooks", "session-end.mjs")}`;
-  const matchers = settings.hooks.SessionEnd.filter((h) => h.matcher === "*");
-  if (!matchers.some((h) => JSON.stringify(h.hooks).includes("session-end.mjs"))) {
-    settings.hooks.SessionEnd.push({ matcher: "*", hooks: [{ type: "command", command: cmd }] });
-    writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + "\n");
-    console.log(`registered SessionEnd hook in ${settingsPath}`);
-  } else {
-    console.log("SessionEnd hook already registered");
+  for (const { event, script } of [
+    { event: "SessionStart", script: "session-start.mjs" },
+    { event: "SessionEnd", script: "session-end.mjs" },
+  ]) {
+    settings.hooks[event] ??= [];
+    const cmd = `node ${join(ROOT, "hooks", script)}`;
+    if (!settings.hooks[event].some((h) => JSON.stringify(h.hooks).includes(script))) {
+      settings.hooks[event].push({ matcher: "*", hooks: [{ type: "command", command: cmd }] });
+      console.log(`registered ${event} hook in ${settingsPath}`);
+    } else {
+      console.log(`${event} hook already registered`);
+    }
+  }
+  writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + "\n");
+}
+
+function registerRules() {
+  // Append a one-screen rules pointer so the gates are visible in every
+  // project, not just inside the solstack repo.
+  const pointer = [
+    "",
+    "<!-- solstack-rules:v1 -->",
+    "## solstack 규칙 (전역)",
+    "",
+    `- 게이트: ${join(ROOT, "AGENTS.md")} 를 따른다. skills/ 직접 수정 금지;`,
+    "  모든 변경은 harvest → review-pending 컨펌 경유로만 반영한다.",
+    "- 세션 시작 시 UPDATE-NOTICE.md 알림이 보이면 사용자에게 알리고,",
+    "  컨펌 후 upgrade 스킬로 pull한다.",
+    "",
+  ].join("\n");
+  for (const file of [
+    join(homedir(), ".claude", "CLAUDE.md"),
+    join(homedir(), ".codex", "AGENTS.md"),
+  ]) {
+    if (!existsSync(dirname(file))) continue;
+    let text = "";
+    try { text = readFileSync(file, "utf8"); } catch { /* new file */ }
+    if (text.includes("<!-- solstack-rules")) { console.log(`rules already present in ${file}`); continue; }
+    writeFileSync(file, text.replace(/\n*$/, "\n") + pointer);
+    console.log(`rules pointer appended to ${file}`);
   }
 }
 
@@ -122,5 +155,6 @@ for (const host of hosts) {
   for (const line of installInto(host, dest, args.link)) console.log(line);
 }
 
-if (args.withHooks) registerClaudeHook();
+if (args.withHooks) registerClaudeHooks();
+if (args.withRules) registerRules();
 console.log("done.");
